@@ -1,0 +1,169 @@
+import streamlit as st
+import pandas as pd
+
+# -----------------------------
+# PAGE CONFIG
+# -----------------------------
+st.set_page_config(
+    page_title="Cisco Security Comparison Tool (Demo)",
+    layout="wide"
+)
+
+st.title("🔐 Cisco Security Capability Comparison (Demo)")
+st.caption("Internal demo – capability-based, product-scoped comparison")
+
+# -----------------------------
+# DATA MODELS (DEMO)
+# -----------------------------
+
+# Vendor Capability Master (simplified)
+VENDOR_CAPABILITIES = {
+    "Cisco": {
+        "Network Security": 5,
+        "Email Security": 5,
+        "Threat Prevention": 4,
+        "Identity & Zero Trust": 5,
+        "Cloud Security (SSE)": 4,
+        "Compliance & Sovereignty": 5
+    },
+    "Palo Alto Networks": {
+        "Network Security": 5,
+        "Email Security": 3,
+        "Threat Prevention": 5,
+        "Identity & Zero Trust": 3,
+        "Cloud Security (SSE)": 5,
+        "Compliance & Sovereignty": 4
+    }
+}
+
+# Product → Capability Mapping
+PRODUCT_CAPABILITY_MAP = {
+    "Cisco Secure Firewall": [
+        "Network Security",
+        "Threat Prevention",
+        "Compliance & Sovereignty"
+    ],
+    "Cisco Secure Email": [
+        "Email Security",
+        "Threat Prevention"
+    ],
+    "Cisco Duo": [
+        "Identity & Zero Trust",
+        "Compliance & Sovereignty"
+    ],
+    "Cisco Umbrella": [
+        "Cloud Security (SSE)",
+        "Threat Prevention"
+    ]
+}
+
+ALL_CAPABILITIES = list(VENDOR_CAPABILITIES["Cisco"].keys())
+
+# -----------------------------
+# UI INPUTS
+# -----------------------------
+st.sidebar.header("🔧 Input Parameters")
+
+customer = st.sidebar.text_input("Customer Name", "State Bank of India")
+
+cisco_products = st.sidebar.multiselect(
+    "Select Cisco Products",
+    options=list(PRODUCT_CAPABILITY_MAP.keys()),
+    default=["Cisco Secure Firewall", "Cisco Duo"]
+)
+
+competitor = st.sidebar.selectbox(
+    "Select Competitor",
+    options=["Palo Alto Networks"]
+)
+
+st.sidebar.markdown("---")
+st.sidebar.caption("Demo assumptions baked into tool")
+
+# -----------------------------
+# CAPABILITY ACTIVATION LOGIC
+# -----------------------------
+activated_capabilities = set()
+
+for product in cisco_products:
+    activated_capabilities.update(PRODUCT_CAPABILITY_MAP[product])
+
+# -----------------------------
+# BUILD COMPARISON MATRIX
+# -----------------------------
+rows = []
+
+for capability in ALL_CAPABILITIES:
+    if capability in activated_capabilities:
+        cisco_score = VENDOR_CAPABILITIES["Cisco"][capability]
+        competitor_score = VENDOR_CAPABILITIES[competitor][capability]
+
+        if cisco_score > competitor_score:
+            position = "🟢 Cisco Advantage"
+        elif cisco_score < competitor_score:
+            position = "🔴 Competitor Advantage"
+        else:
+            position = "🟡 Comparable"
+
+        status = "✅ In Scope"
+    else:
+        cisco_score = "—"
+        competitor_score = VENDOR_CAPABILITIES[competitor][capability]
+        position = "⚪ Not Compared"
+        status = "❌ Out of Scope"
+
+    rows.append([
+        capability,
+        cisco_score,
+        competitor_score,
+        position,
+        status
+    ])
+
+df = pd.DataFrame(
+    rows,
+    columns=[
+        "Capability",
+        "Cisco Score",
+        f"{competitor} Score",
+        "Positioning",
+        "Scope Status"
+    ]
+)
+
+# -----------------------------
+# OUTPUTS
+# -----------------------------
+st.subheader(f"📊 Capability Comparison – {customer}")
+
+st.dataframe(df, use_container_width=True)
+
+# -----------------------------
+# INSIGHTS
+# -----------------------------
+st.subheader("🧠 Auto-Generated Insights")
+
+wins = df[df["Positioning"] == "🟢 Cisco Advantage"]["Capability"].tolist()
+losses = df[df["Positioning"] == "🔴 Competitor Advantage"]["Capability"].tolist()
+out_of_scope = df[df["Scope Status"] == "❌ Out of Scope"]["Capability"].tolist()
+
+if wins:
+    st.success(f"**Cisco Advantages:** {', '.join(wins)}")
+
+if losses:
+    st.warning(f"**Competitive Pressure Areas:** {', '.join(losses)}")
+
+if out_of_scope:
+    st.info(
+        "Capabilities intentionally out of scope for selected Cisco products: "
+        + ", ".join(out_of_scope)
+    )
+
+# -----------------------------
+# FOOTER
+# -----------------------------
+st.markdown("---")
+st.caption(
+    "This demo uses simplified scores for illustration. "
+    "Production version should externalize data into JSON and apply governance."
+)
