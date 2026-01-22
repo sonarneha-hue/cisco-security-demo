@@ -88,6 +88,12 @@ st.sidebar.header("🔧 Input Parameters")
 
 customer = st.sidebar.text_input("Customer Name", "State Bank of India")
 
+bank_type = st.sidebar.selectbox(
+    "Bank Archetype",
+    options=list(BANK_ARCHETYPES.keys()),
+    index=0
+)
+
 cisco_products = st.sidebar.multiselect(
     "Select Cisco Products",
     options=list(PRODUCT_CAPABILITY_MAP.keys()),
