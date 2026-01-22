@@ -224,12 +224,7 @@ df = pd.DataFrame(
 )
 
 
-# --- Final Score Calculation ---
-#final_score = calculate_final_score(
-#    industry_weight,
-#    vendor_strength,
-#    capability_active
-#)
+
 
 st.subheader("📊 Final Score Calculation")
 
@@ -252,7 +247,12 @@ with col4:
 
 # --- Show the formula clearly ---
 
-
+# --- Final Score Calculation ---
+final_score = calculate_final_score(
+    industry_weight,
+    vendor_strength,
+    capability_active
+)
 
 # -----------------------------
 # OUTPUTS
