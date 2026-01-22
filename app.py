@@ -226,33 +226,33 @@ df = pd.DataFrame(
 
 
 
-st.subheader("📊 Final Score Calculation")
+#st.subheader("📊 Final Score Calculation")
 
-col1, col2, col3, col4 = st.columns(4)
+#col1, col2, col3, col4 = st.columns(4)
 
-with col1:
-    st.metric("Industry Weight", industry_weight)
+#with col1:
+#    st.metric("Industry Weight", industry_weight)
 
-with col2:
-    st.metric("Vendor Strength", vendor_strength)
+#with col2:
+#    st.metric("Vendor Strength", vendor_strength)
 
-with col3:
-    st.metric(
-        "Capability Active",
-        "Yes" if capability_active else "No"
-    )
+#with col3:
+#    st.metric(
+#        "Capability Active",
+#        "Yes" if capability_active else "No"
+#    )
 
-with col4:
-    st.metric("Final Score", final_score)
+#with col4:
+#    st.metric("Final Score", final_score)
 
 # --- Show the formula clearly ---
 
 # --- Final Score Calculation ---
-final_score = calculate_final_score(
-    industry_weight,
-    vendor_strength,
-    capability_active
-)
+#final_score = calculate_final_score(
+#    industry_weight,
+#    vendor_strength,
+#    capability_active
+#)
 
 # -----------------------------
 # OUTPUTS
