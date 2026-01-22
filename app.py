@@ -1,21 +1,27 @@
 import streamlit as st
 import pandas as pd
 
-# Industry Weight Drivers (Demo – BFSI)
-INDUSTRY_DRIVERS = {
-    "State Bank of India": {
+BANK_ARCHETYPES = {
+    "PSU Large Bank": {
         "Regulatory Pressure": 5,
         "Data Sovereignty": 5,
         "Legacy Footprint": 4,
         "Cloud Maturity": 2
     },
-    "HDFC Bank": {
+    "Private Large Bank": {
         "Regulatory Pressure": 4,
         "Data Sovereignty": 3,
         "Legacy Footprint": 2,
         "Cloud Maturity": 4
+    },
+    "Central Bank / Regulator": {
+        "Regulatory Pressure": 5,
+        "Data Sovereignty": 5,
+        "Legacy Footprint": 5,
+        "Cloud Maturity": 1
     }
 }
+
 
 # -----------------------------
 # PAGE CONFIG
@@ -106,7 +112,7 @@ for product in cisco_products:
 
 st.subheader("🏦 Industry Weight Drivers")
 
-drivers = INDUSTRY_DRIVERS.get(customer, None)
+drivers = BANK_ARCHETYPES.get(bank_type)
 
 if drivers:
     driver_df = pd.DataFrame(
