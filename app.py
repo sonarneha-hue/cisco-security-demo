@@ -225,11 +225,11 @@ df = pd.DataFrame(
 
 
 # --- Final Score Calculation ---
-final_score = calculate_final_score(
-    industry_weight,
-    vendor_strength,
-    capability_active
-)
+#final_score = calculate_final_score(
+#    industry_weight,
+#    vendor_strength,
+#    capability_active
+#)
 
 st.subheader("📊 Final Score Calculation")
 
