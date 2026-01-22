@@ -1,6 +1,20 @@
 import streamlit as st
 import pandas as pd
 
+# --- Imports ---
+import streamlit as st
+
+# --- ADD THIS BLOCK BELOW IMPORTS ---
+def calculate_final_score(industry_weight, vendor_strength, capability_active):
+    """
+    Final Score = Industry Weight × Vendor Strength
+    Score = 0 if capability is not active
+    """
+    if not capability_active:
+        return 0
+    return round(industry_weight * vendor_strength, 2)
+
+
 BANK_ARCHETYPES = {
     "PSU Large Bank": {
         "Regulatory Pressure": 5,
@@ -218,6 +232,39 @@ df = pd.DataFrame(
         "Scope Status"
     ]
 )
+
+
+# --- Final Score Calculation ---
+final_score = calculate_final_score(
+    industry_weight,
+    vendor_strength,
+    capability_active
+)
+
+st.subheader("📊 Final Score Calculation")
+
+col1, col2, col3, col4 = st.columns(4)
+
+with col1:
+    st.metric("Industry Weight", industry_weight)
+
+with col2:
+    st.metric("Vendor Strength", vendor_strength)
+
+with col3:
+    st.metric(
+        "Capability Active",
+        "Yes" if capability_active else "No"
+    )
+
+with col4:
+    st.metric("Final Score", final_score)
+
+# --- Show the formula clearly ---
+if capability_active:
+    st.markdown(
+        f"""
+
 
 # -----------------------------
 # OUTPUTS
