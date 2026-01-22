@@ -1,6 +1,22 @@
 import streamlit as st
 import pandas as pd
 
+# Industry Weight Drivers (Demo – BFSI)
+INDUSTRY_DRIVERS = {
+    "State Bank of India": {
+        "Regulatory Pressure": 5,
+        "Data Sovereignty": 5,
+        "Legacy Footprint": 4,
+        "Cloud Maturity": 2
+    },
+    "HDFC Bank": {
+        "Regulatory Pressure": 4,
+        "Data Sovereignty": 3,
+        "Legacy Footprint": 2,
+        "Cloud Maturity": 4
+    }
+}
+
 # -----------------------------
 # PAGE CONFIG
 # -----------------------------
@@ -87,6 +103,33 @@ activated_capabilities = set()
 
 for product in cisco_products:
     activated_capabilities.update(PRODUCT_CAPABILITY_MAP[product])
+
+st.subheader("🏦 Industry Weight Drivers")
+
+drivers = INDUSTRY_DRIVERS.get(customer, None)
+
+if drivers:
+    driver_df = pd.DataFrame(
+        drivers.items(),
+        columns=["Industry Factor", "Weight (1–5)"]
+    )
+
+    st.dataframe(driver_df, use_container_width=True)
+
+    avg_weight = round(sum(drivers.values()) / len(drivers), 1)
+
+    if avg_weight >= 4:
+        weight_label = "HIGH"
+    elif avg_weight >= 3:
+        weight_label = "MEDIUM"
+    else:
+        weight_label = "LOW"
+
+    st.info(f"**Derived Industry Weight:** {weight_label} (Avg: {avg_weight})")
+
+else:
+    st.warning("No industry drivers defined for this customer.")
+
 
 # -----------------------------
 # BUILD COMPARISON MATRIX
