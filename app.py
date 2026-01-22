@@ -263,7 +263,13 @@ with col4:
 # --- Show the formula clearly ---
 if capability_active:
     st.markdown(
-        f"""
+    f"```\n"
+    f"Final Score = Industry Weight × Vendor Strength\n"
+    f"             = {industry_weight} × {vendor_strength}\n"
+    f"             = {final_score}\n"
+    f"```"
+)
+
 
 
 # -----------------------------
