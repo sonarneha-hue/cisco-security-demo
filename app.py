@@ -22,6 +22,20 @@ BANK_ARCHETYPES = {
     }
 }
 
+BANK_ARCHETYPE_HINTS = {
+    "State Bank of India": "PSU Large Bank",
+    "SBI": "PSU Large Bank",
+    "Bank of Baroda": "PSU Large Bank",
+    "Punjab National Bank": "PSU Large Bank",
+
+    "HDFC Bank": "Private Large Bank",
+    "ICICI Bank": "Private Large Bank",
+    "Axis Bank": "Private Large Bank",
+
+    "Reserve Bank of India": "Central Bank / Regulator",
+    "RBI": "Central Bank / Regulator"
+}
+
 
 # -----------------------------
 # PAGE CONFIG
@@ -88,11 +102,30 @@ st.sidebar.header("🔧 Input Parameters")
 
 customer = st.sidebar.text_input("Customer Name", "State Bank of India")
 
+# bank_type = st.sidebar.selectbox(
+#   "Bank Archetype",
+#    options=list(BANK_ARCHETYPES.keys()),
+#    index=0
+#)
+
+# Auto-suggest archetype based on customer name
+suggested_archetype = BANK_ARCHETYPE_HINTS.get(customer)
+
+# Fallback if bank is unknown or not mapped
+if suggested_archetype not in BANK_ARCHETYPES:
+    suggested_archetype = list(BANK_ARCHETYPES.keys())[0]
+
 bank_type = st.sidebar.selectbox(
-    "Bank Archetype",
+    "Bank Archetype (auto-suggested, editable)",
     options=list(BANK_ARCHETYPES.keys()),
-    index=0
+    index=list(BANK_ARCHETYPES.keys()).index(suggested_archetype)
 )
+
+st.sidebar.caption(
+    "Archetype is auto-suggested based on bank metadata. "
+    "User can override if required."
+)
+
 
 cisco_products = st.sidebar.multiselect(
     "Select Cisco Products",
