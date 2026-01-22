@@ -4,16 +4,6 @@ import pandas as pd
 # --- Imports ---
 import streamlit as st
 
-# --- ADD THIS BLOCK BELOW IMPORTS ---
-def calculate_final_score(industry_weight, vendor_strength, capability_active):
-    """
-    Final Score = Industry Weight × Vendor Strength
-    Score = 0 if capability is not active
-    """
-    if not capability_active:
-        return 0
-    return round(industry_weight * vendor_strength, 2)
-
 
 BANK_ARCHETYPES = {
     "PSU Large Bank": {
